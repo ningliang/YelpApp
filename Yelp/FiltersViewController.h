@@ -8,12 +8,13 @@
 
 #import <UIKit/UIKit.h>
 #import "QueryFilters.h"
+#import "ToggleCell.h"
 
 @protocol FiltersViewDelegate <NSObject>
 - (void)didSelectQueryFilters:(QueryFilters *)queryFilters;
 @end
 
-@interface FiltersViewController : UIViewController <UITableViewDataSource, UITableViewDelegate>
+@interface FiltersViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, ToggleCellDelegate>
 
 @property (nonatomic, strong) UIBarButtonItem *cancelButton;
 @property (nonatomic, strong) UIBarButtonItem *searchButton;

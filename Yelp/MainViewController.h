@@ -10,7 +10,7 @@
 #import "FiltersViewController.h"
 #import "QueryFilters.h"
 
-@interface MainViewController : UIViewController <FiltersViewDelegate, UITableViewDataSource, UITableViewDelegate>
+@interface MainViewController : UIViewController <FiltersViewDelegate, UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate>
 
 @property (nonatomic, strong) NSArray* businesses;
 

@@ -20,6 +20,8 @@
 - (void)awakeFromNib
 {
     // Initialization code
+    [self.toggleSwitch addTarget:self action:@selector(onToggleChange:) forControlEvents:UIControlEventValueChanged];
+
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated
@@ -37,5 +39,11 @@
     _on = on;
     self.toggleSwitch.on = on;
 }
+
+- (void)onToggleChange:(id)sender {
+    _on = self.toggleSwitch.on;
+    [self.delegate didToggle:self.toggleName withIndex:self.toggleIndex andOn:self.toggleSwitch.on];
+}
+
 
 @end

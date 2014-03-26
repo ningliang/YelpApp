@@ -22,6 +22,7 @@ NSString * const kYelpTokenSecret = @"mqtKIxMIR4iBtBPZCmCLEb-Dz3Y";
 @property (nonatomic, strong) YelpClient *client;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (nonatomic, strong) UIBarButtonItem *filterButton;
+@property (nonatomic, strong) UISearchBar *searchBar;
 
 // Prototype cell used to calculate height
 @property (nonatomic, strong) BusinessCell *prototypeCell;
@@ -56,10 +57,18 @@ NSString * const kYelpTokenSecret = @"mqtKIxMIR4iBtBPZCmCLEb-Dz3Y";
     
     self.prototypeCell = [self.tableView dequeueReusableCellWithIdentifier:@"BusinessCell"];
     
-    // TODO style the button
     self.filterButton = [[UIBarButtonItem alloc] initWithTitle:@"Filter" style:UIBarButtonItemStyleBordered target:self action:@selector(onFilterClick:)];
+    [self.filterButton setTintColor:[UIColor whiteColor]];
     
     [self.navigationItem setLeftBarButtonItem:self.filterButton];
+    
+    
+    // Search bar
+    self.searchBar = [[UISearchBar alloc] init];
+    self.navigationItem.titleView = self.searchBar;
+    self.searchBar.delegate = self;
+    self.searchBar.text = self.queryFilters.term;
+    
     [self reloadData];
 }
 
@@ -98,9 +107,8 @@ NSString * const kYelpTokenSecret = @"mqtKIxMIR4iBtBPZCmCLEb-Dz3Y";
     [cell setBusiness:business withRow:row];
 }
 
-// TODO use the query filters in the search
 - (void)reloadData {
-    [self.client searchWithTerm:@"Thai" success:^(AFHTTPRequestOperation *operation, id response) {
+    [self.client searchWithQueryFilters:self.queryFilters success:^(AFHTTPRequestOperation *operation, id response) {
         NSMutableArray *businesses = [[NSMutableArray alloc] init];
         for (NSDictionary *dictionary in response[@"businesses"]) {
             Business *business = [Business businessWithDictionary:dictionary];
@@ -136,6 +144,12 @@ NSString * const kYelpTokenSecret = @"mqtKIxMIR4iBtBPZCmCLEb-Dz3Y";
     }
     [self dismissViewControllerAnimated:YES completion:nil];
 
+}
+
+- (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar {
+    self.queryFilters.term = searchBar.text;
+    [searchBar resignFirstResponder];
+    [self reloadData];
 }
 
 @end

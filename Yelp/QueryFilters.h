@@ -10,6 +10,9 @@
 
 @interface QueryFilters : NSObject
 
+// Search
+@property (nonatomic, strong) NSString *term;
+
 // Toggles
 - (BOOL) toggleValue:(NSInteger) index;
 - (NSString *) toggleName:(NSInteger) index;
@@ -25,5 +28,8 @@
 
 // Deep copy
 - (QueryFilters *) clone;
+
+// Search params
+- (NSString *)categoryFilters;
 
 @end

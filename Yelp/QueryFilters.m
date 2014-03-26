@@ -25,6 +25,8 @@
         self.toggleParams = @[@"cuban", @"delis", @"diners", @"french",
                               @"gastropubs", @"halal", @"hotpot", @"pizza"];
         self.toggleValues = [@[@(NO), @(NO), @(NO), @(NO), @(NO), @(NO), @(NO), @(NO)] mutableCopy];
+        
+        self.term = @"";
     }
     return self;
 }
@@ -34,7 +36,7 @@
 }
 
 - (NSString *) toggleName:(NSInteger) index {
-    return [self.toggleNames[index] stringValue];
+    return self.toggleNames[index];
 }
 
 - (NSString *) toggleParam:(NSInteger) index {
@@ -63,6 +65,19 @@
     copy.sortOrder = self.sortOrder;
 
     return copy;
+}
+
+- (NSString *)categoryFilters {
+    NSMutableArray *onValues = [[NSMutableArray alloc] init];
+    
+    NSInteger index = 0;
+    for (id value in self.toggleValues) {
+        if ([value boolValue]) {
+            [onValues addObject:self.toggleParams[index]];
+        }
+        index += 1;
+    }
+    return [onValues componentsJoinedByString:@", "];
 }
 
 @end

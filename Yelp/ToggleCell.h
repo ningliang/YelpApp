@@ -8,10 +8,19 @@
 
 #import <UIKit/UIKit.h>
 
+@protocol ToggleCellDelegate <NSObject>
+
+- (void)didToggle:(NSString *)toggleName withIndex:(NSInteger)toggleIndex andOn:(BOOL)on;
+
+@end
+
 @interface ToggleCell : UITableViewCell
 
-@property (assign, nonatomic) NSInteger toggleIndex;
-@property (strong, nonatomic) NSString *toggleName;
-@property (assign, nonatomic) BOOL on;
+@property (nonatomic, strong) NSString *toggleName;
+@property (nonatomic, assign) NSInteger toggleIndex;
+@property (nonatomic, assign) BOOL on;
+@property (nonatomic, strong) id<ToggleCellDelegate> delegate;
+
+- (void) onToggleChange:(id)sender;
 
 @end

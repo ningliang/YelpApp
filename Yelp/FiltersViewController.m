@@ -40,11 +40,13 @@
     
     // TODO style the button
     self.cancelButton = [[UIBarButtonItem alloc] initWithTitle:@"Cancel" style:UIBarButtonItemStyleBordered target:self action:@selector(onCancelClick:)];
+    [self.cancelButton setTintColor:[UIColor whiteColor]];
     
     [self.navigationItem setLeftBarButtonItem:self.cancelButton];
 
     // TODO style the button
     self.searchButton = [[UIBarButtonItem alloc] initWithTitle:@"Search" style:UIBarButtonItemStyleBordered target:self action:@selector(onSearchClick:)];
+    [self.searchButton setTintColor:[UIColor whiteColor]];
 
     [self.navigationItem setRightBarButtonItem:self.searchButton];
     self.navigationItem.title = @"Filters";
@@ -60,8 +62,6 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    NSLog(@"%@", indexPath);
-    
     // NSInteger section = indexPath.section;
     NSInteger row = indexPath.row;
     
@@ -70,7 +70,8 @@
     toggleCell.toggleIndex = row;
     toggleCell.toggleName = [self.queryFilters toggleName:row];
     toggleCell.on = [self.queryFilters toggleValue:row];
-        
+    toggleCell.delegate = self;
+    
     return toggleCell;
 }
 
@@ -82,8 +83,16 @@
     return 1; // FOR NOW
 }
 
-- (NSArray *)sectionIndexTitlesForTableView:(UITableView *)tableView {
-    return @[@"Category"];
+// - (NSArray *)sectionIndexTitlesForTableView:(UITableView *)tableView {
+//    return @[@"Category"];
+// }
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    return 60;
+}
+
+- (void)didToggle:(NSString *)toggleName withIndex:(NSInteger)toggleIndex andOn:(BOOL)on {
+    [self.queryFilters setToggle:toggleIndex withValue:on];
 }
 
 - (void)onCancelClick:(id)sender {

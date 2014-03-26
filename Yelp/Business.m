@@ -17,7 +17,12 @@
     business.rating = [dictionary[@"rating"] floatValue];
     business.reviewCount = [dictionary[@"review_count"] integerValue];
     business.address = dictionary[@"location"][@"display_address"][0];
-    business.neighborhood = dictionary[@"location"][@"display_address"][2];
+    
+    if ([dictionary[@"location"][@"display_address"]  count] >= 3) {
+        business.neighborhood = dictionary[@"location"][@"display_address"][2];
+    } else {
+        business.neighborhood = nil;
+    }
     business.imageUrl = dictionary[@"image_url"];
     business.ratingImageUrl = dictionary[@"rating_img_url"];
     
