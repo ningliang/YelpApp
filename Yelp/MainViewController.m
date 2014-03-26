@@ -137,7 +137,6 @@ NSString * const kYelpTokenSecret = @"mqtKIxMIR4iBtBPZCmCLEb-Dz3Y";
 }
 
 - (void)didSelectQueryFilters:(QueryFilters *)queryFilters {
-    NSLog(@"%@", queryFilters);
     if (queryFilters) {
         self.queryFilters = queryFilters;
         [self reloadData];

@@ -21,13 +21,18 @@
 }
 
 - (AFHTTPRequestOperation *)searchWithQueryFilters:(QueryFilters *)queryFilters success:(void (^)(AFHTTPRequestOperation *operation, id response))success failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure {
-    
+
     // For additional parameters, see http://www.yelp.com/developers/documentation/v2/search_api
-    NSDictionary *parameters = @{
+    NSMutableDictionary *parameters = [@{
                                  @"term": queryFilters.term,
                                  @"location" : @"San Francisco",
-                                 @"category_filter" : [queryFilters categoryFilters]
-                                 };
+                                 @"category_filter" : [queryFilters categoryFilters],
+                                 @"sort": [NSNumber numberWithInteger:[queryFilters sortParameter]]
+                                 } mutableCopy];
+    
+    if (queryFilters.distance != 0.0) {
+        [parameters setValue:[NSNumber numberWithFloat:queryFilters.distance] forKey:@"radius_filter"];
+    }
     
     return [self GET:@"search" parameters:parameters success:success failure:failure];
 }

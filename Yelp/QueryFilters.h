@@ -26,14 +26,16 @@
 
 // Distance limit
 @property (nonatomic, assign) float distance;
-@property (nonatomic, assign) NSArray *distances;
-@property (nonatomic, assign) NSArray *distanceNames;
+@property (nonatomic, strong) NSArray *distances;
+@property (nonatomic, strong) NSArray *distanceNames;
 - (NSString *) selectedDistanceName;
+
 
 // Deep copy
 - (QueryFilters *) clone;
 
 // Search params
 - (NSString *)categoryFilters;
+- (NSInteger) sortParameter;
 
 @end

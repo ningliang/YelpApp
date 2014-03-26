@@ -20,8 +20,6 @@
 - (void)awakeFromNib
 {
     // Initialization code
-    self.radioStatusView.layer.borderWidth = 15;
-    self.radioStatusView.layer.borderColor = [UIColor blackColor].CGColor;
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated
@@ -39,8 +37,12 @@
 
 - (void)setOn:(BOOL)on {
     _on = on;
+    
+    self.radioStatusView.layer.borderWidth = 1;
+    self.radioStatusView.layer.cornerRadius = 15;
+    self.radioStatusView.layer.borderColor = [UIColor grayColor].CGColor;
     if (_on) {
-        self.radioStatusView.layer.backgroundColor = [UIColor blueColor].CGColor;
+        self.radioStatusView.layer.backgroundColor = [UIColor grayColor].CGColor;
     } else {
         self.radioStatusView.layer.backgroundColor = [UIColor whiteColor].CGColor;
     }

@@ -13,18 +13,25 @@
                 <rect key="frame" x="0.0" y="0.0" width="320" height="59"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="AVe-wB-ZrC">
-                        <rect key="frame" x="20" y="19" width="42" height="21"/>
+                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="AVe-wB-ZrC">
+                        <rect key="frame" x="20" y="20" width="242" height="21"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="MLU-Nh-YHq">
+                    <view contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="MLU-Nh-YHq">
                         <rect key="frame" x="270" y="15" width="30" height="30"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
                 </subviews>
+                <constraints>
+                    <constraint firstAttribute="trailing" secondItem="MLU-Nh-YHq" secondAttribute="trailing" constant="20" id="BDt-3U-rdJ"/>
+                    <constraint firstItem="AVe-wB-ZrC" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="20" id="T7X-IE-1Mk"/>
+                    <constraint firstItem="AVe-wB-ZrC" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="20" id="gBO-Dz-tTL"/>
+                    <constraint firstItem="MLU-Nh-YHq" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="15" id="ja9-dt-ZKa"/>
+                    <constraint firstItem="MLU-Nh-YHq" firstAttribute="leading" secondItem="AVe-wB-ZrC" secondAttribute="trailing" constant="20" id="qaB-7o-meS"/>
+                </constraints>
             </tableViewCellContentView>
             <connections>
                 <outlet property="radioLabel" destination="AVe-wB-ZrC" id="qle-yg-et4"/>

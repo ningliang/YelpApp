@@ -14,9 +14,7 @@
 @interface FiltersViewController ()
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
-
-@property (nonatomic, assign) BOOL sortOrderExpanded;
-@property (nonatomic, assign) BOOL distanceExpanded;
+@property (nonatomic, strong) NSMutableArray *expanded;
 
 @end
 
@@ -35,6 +33,8 @@
 {
     [super viewDidLoad];
 
+    self.expanded = [@[@(NO), @(NO)] mutableCopy];
+    
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     
@@ -84,14 +84,24 @@
     } else {
         RadioCell *radioCell = [tableView dequeueReusableCellWithIdentifier:@"RadioCell" forIndexPath:indexPath];
         
-        if (section == 1) {
-            // Sort order
-            radioCell.radioName = self.queryFilters.sortOrders[indexPath.row];
-            radioCell.on = [radioCell.radioName isEqualToString:self.queryFilters.sortOrder];
+        if ([self.expanded[section - 1] boolValue]) {
+            if (section == 1) {
+                // Sort order
+                radioCell.radioName = self.queryFilters.sortOrders[indexPath.row];
+                radioCell.on = [radioCell.radioName isEqualToString:self.queryFilters.sortOrder];
+            } else {
+                // Distance limit
+                radioCell.radioName = self.queryFilters.distanceNames[indexPath.row];
+                radioCell.on = [radioCell.radioName isEqualToString:[self.queryFilters selectedDistanceName]];
+            }
         } else {
-            // Distance limit
-            radioCell.radioName = self.queryFilters.distanceNames[indexPath.row];
-            radioCell.on = [radioCell.radioName isEqualToString:[self.queryFilters selectedDistanceName]];
+            if (section == 1) {
+                radioCell.radioName = self.queryFilters.sortOrder;
+                radioCell.on = true;
+            } else {
+                radioCell.radioName = [self.queryFilters selectedDistanceName];
+                radioCell.on = true;
+            }
         }
         
         return radioCell;
@@ -103,8 +113,18 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     switch (section) {
         case 0: return self.queryFilters.toggleCount;
-        case 1: return [self.queryFilters.sortOrders count];
-        default: return [self.queryFilters.distances count];
+        case 1:
+            if ([self.expanded[0] boolValue]) {
+                return [self.queryFilters.sortOrders count];
+            } else {
+                return 1;
+            }
+        default:
+            if ([self.expanded[1] boolValue]) {
+                return [self.queryFilters.distanceNames count];
+            } else {
+                return 1;
+            }
     }
 }
 
@@ -129,6 +149,22 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     return 60;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    NSInteger section = indexPath.section;
+    
+    if (section == 0) {
+        return;
+    } else if (section == 1) {
+        self.queryFilters.sortOrder = self.queryFilters.sortOrders[indexPath.row];
+        self.expanded[0] = @(![self.expanded[0] boolValue]);
+    } else if (section == 2) {
+        self.queryFilters.distance = [self.queryFilters.distances[indexPath.row] floatValue];
+        self.expanded[1] = @(![self.expanded[1] boolValue]);
+    }
+    
+    [self.tableView reloadData];
 }
 
 - (void)didToggle:(NSString *)toggleName withIndex:(NSInteger)toggleIndex andOn:(BOOL)on {
