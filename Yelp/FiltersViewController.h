@@ -7,11 +7,19 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "QueryFilters.h"
+
+@protocol FiltersViewDelegate <NSObject>
+- (void)didSelectQueryFilters:(QueryFilters *)queryFilters;
+@end
 
 @interface FiltersViewController : UIViewController <UITableViewDataSource, UITableViewDelegate>
 
 @property (nonatomic, strong) UIBarButtonItem *cancelButton;
 @property (nonatomic, strong) UIBarButtonItem *searchButton;
+@property (nonatomic, strong) QueryFilters *queryFilters;
+
+@property (nonatomic, assign) id<FiltersViewDelegate> delegate;
 
 - (void)onCancelClick:(id)sender;
 - (void)onSearchClick:(id)sender;

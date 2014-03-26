@@ -7,11 +7,14 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "FiltersViewController.h"
+#import "QueryFilters.h"
 
-@interface MainViewController : UIViewController <UITableViewDataSource, UITableViewDelegate>
+@interface MainViewController : UIViewController <FiltersViewDelegate, UITableViewDataSource, UITableViewDelegate>
 
 @property (nonatomic, strong) NSArray* businesses;
 
 - (void)onFilterClick:(id)sender;
 
 @end
+

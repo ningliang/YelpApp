@@ -7,7 +7,6 @@
 //
 
 #import "MainViewController.h"
-#import "FiltersViewController.h"
 
 #import "YelpClient.h"
 #import "Business.h"
@@ -27,6 +26,9 @@ NSString * const kYelpTokenSecret = @"mqtKIxMIR4iBtBPZCmCLEb-Dz3Y";
 // Prototype cell used to calculate height
 @property (nonatomic, strong) BusinessCell *prototypeCell;
 
+// Query filters
+@property (nonatomic, strong) QueryFilters *queryFilters;
+
 @end
 
 @implementation MainViewController
@@ -43,6 +45,8 @@ NSString * const kYelpTokenSecret = @"mqtKIxMIR4iBtBPZCmCLEb-Dz3Y";
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    self.queryFilters = [[QueryFilters alloc] init];
     
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
@@ -94,8 +98,7 @@ NSString * const kYelpTokenSecret = @"mqtKIxMIR4iBtBPZCmCLEb-Dz3Y";
     [cell setBusiness:business withRow:row];
 }
 
-// TODO show loading screen
-// TODO show network error
+// TODO use the query filters in the search
 - (void)reloadData {
     [self.client searchWithTerm:@"Thai" success:^(AFHTTPRequestOperation *operation, id response) {
         NSMutableArray *businesses = [[NSMutableArray alloc] init];
@@ -114,11 +117,25 @@ NSString * const kYelpTokenSecret = @"mqtKIxMIR4iBtBPZCmCLEb-Dz3Y";
 - (void)onFilterClick:(id)sender {
     FiltersViewController *filtersViewController = [[FiltersViewController alloc] init];
     
+    QueryFilters *queryFiltersCopy = [self.queryFilters clone];
+    filtersViewController.queryFilters = queryFiltersCopy;
+    filtersViewController.delegate = self;
+    
     UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:filtersViewController];
     
     [navController.navigationBar setBarTintColor:[UIColor colorWithRed:0.804 green:0.11 blue:0.094 alpha:1.0]];
     
     [self presentViewController:navController animated:YES completion:nil];
+}
+
+- (void)didSelectQueryFilters:(QueryFilters *)queryFilters {
+    NSLog(@"%@", queryFilters);
+    if (queryFilters) {
+        self.queryFilters = queryFilters;
+        [self reloadData];
+    }
+    [self dismissViewControllerAnimated:YES completion:nil];
+
 }
 
 @end
