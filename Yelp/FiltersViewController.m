@@ -9,10 +9,14 @@
 #import "FiltersViewController.h"
 #import "MainViewController.h"
 #import "ToggleCell.h"
+#import "RadioCell.h"
 
 @interface FiltersViewController ()
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
+
+@property (nonatomic, assign) BOOL sortOrderExpanded;
+@property (nonatomic, assign) BOOL distanceExpanded;
 
 @end
 
@@ -38,19 +42,20 @@
     UINib *toggleCellNib = [UINib nibWithNibName:@"ToggleCell" bundle:nil];
     [self.tableView registerNib:toggleCellNib forCellReuseIdentifier:@"ToggleCell"];
     
-    // TODO style the button
+    UINib *radioCellNib = [UINib nibWithNibName:@"RadioCell" bundle:nil];
+    [self.tableView registerNib:radioCellNib forCellReuseIdentifier:@"RadioCell"];
+    
     self.cancelButton = [[UIBarButtonItem alloc] initWithTitle:@"Cancel" style:UIBarButtonItemStyleBordered target:self action:@selector(onCancelClick:)];
     [self.cancelButton setTintColor:[UIColor whiteColor]];
     
     [self.navigationItem setLeftBarButtonItem:self.cancelButton];
 
-    // TODO style the button
     self.searchButton = [[UIBarButtonItem alloc] initWithTitle:@"Search" style:UIBarButtonItemStyleBordered target:self action:@selector(onSearchClick:)];
     [self.searchButton setTintColor:[UIColor whiteColor]];
 
     [self.navigationItem setRightBarButtonItem:self.searchButton];
     self.navigationItem.title = @"Filters";
-    
+
     [self.tableView reloadData];
 }
 
@@ -62,30 +67,65 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
+    NSInteger section = indexPath.section;
+    
     // NSInteger section = indexPath.section;
-    NSInteger row = indexPath.row;
+    if (section == 0 ) {
+        NSInteger row = indexPath.row;
     
-    ToggleCell *toggleCell = [tableView dequeueReusableCellWithIdentifier:@"ToggleCell" forIndexPath:indexPath];
+        ToggleCell *toggleCell = [tableView dequeueReusableCellWithIdentifier:@"ToggleCell" forIndexPath:indexPath];
 
-    toggleCell.toggleIndex = row;
-    toggleCell.toggleName = [self.queryFilters toggleName:row];
-    toggleCell.on = [self.queryFilters toggleValue:row];
-    toggleCell.delegate = self;
+        toggleCell.toggleIndex = row;
+        toggleCell.toggleName = [self.queryFilters toggleName:row];
+        toggleCell.on = [self.queryFilters toggleValue:row];
+        toggleCell.delegate = self;
+        
+        return toggleCell;
+    } else {
+        RadioCell *radioCell = [tableView dequeueReusableCellWithIdentifier:@"RadioCell" forIndexPath:indexPath];
+        
+        if (section == 1) {
+            // Sort order
+            radioCell.radioName = self.queryFilters.sortOrders[indexPath.row];
+            radioCell.on = [radioCell.radioName isEqualToString:self.queryFilters.sortOrder];
+        } else {
+            // Distance limit
+            radioCell.radioName = self.queryFilters.distanceNames[indexPath.row];
+            radioCell.on = [radioCell.radioName isEqualToString:[self.queryFilters selectedDistanceName]];
+        }
+        
+        return radioCell;
+    }
     
-    return toggleCell;
+
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return self.queryFilters.toggleCount;
+    switch (section) {
+        case 0: return self.queryFilters.toggleCount;
+        case 1: return [self.queryFilters.sortOrders count];
+        default: return [self.queryFilters.distances count];
+    }
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return 1; // FOR NOW
+    return 3;
 }
 
-// - (NSArray *)sectionIndexTitlesForTableView:(UITableView *)tableView {
-//    return @[@"Category"];
-// }
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
+    switch (section) {
+        case 0: return @"Category";
+        case 1: return @"Sort Order";
+        default: return @"Distance";
+    }
+}
+
+
+// header views
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+    return 60;
+}
+
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     return 60;

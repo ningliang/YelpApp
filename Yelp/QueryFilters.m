@@ -26,6 +26,13 @@
                               @"gastropubs", @"halal", @"hotpot", @"pizza"];
         self.toggleValues = [@[@(NO), @(NO), @(NO), @(NO), @(NO), @(NO), @(NO), @(NO)] mutableCopy];
         
+        self.distances = @[@(0.0), @(0.1), @(0.25), @(1), @(5)];
+        self.distanceNames = @[@"Auto", @"2 blocks", @"5 blocks", @"1 mile", @"5 miles"];
+        self.distance = [self.distances[0] floatValue];
+        
+        self.sortOrders = @[@"Best Match", @"Distance", @"Rating", @"Most Reviewed"];
+        self.sortOrder = self.sortOrders[0];
+
         self.term = @"";
     }
     return self;
@@ -61,7 +68,7 @@
         index += 1;
     }
     
-    copy.radiusLimit = self.radiusLimit;
+    copy.distance = self.distance;
     copy.sortOrder = self.sortOrder;
 
     return copy;
@@ -78,6 +85,20 @@
         index += 1;
     }
     return [onValues componentsJoinedByString:@", "];
+}
+
+- (NSString *) selectedDistanceName {
+    if (self.distance == 0.0) {
+        return self.distanceNames[0];
+    } else if (self.distance == 0.1) {
+        return self.distanceNames[1];
+    } else if (self.distance == 0.25) {
+        return self.distanceNames[2];
+    } else if (self.distance == 1) {
+        return self.distanceNames[3];
+    } else {
+        return self.distanceNames[4];
+    }
 }
 
 @end

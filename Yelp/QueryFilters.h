@@ -22,9 +22,13 @@
 
 // Sort order
 @property (nonatomic, strong) NSString *sortOrder;
+@property (nonatomic, strong) NSArray *sortOrders;
 
 // Distance limit
-@property (nonatomic, assign) float radiusLimit;
+@property (nonatomic, assign) float distance;
+@property (nonatomic, assign) NSArray *distances;
+@property (nonatomic, assign) NSArray *distanceNames;
+- (NSString *) selectedDistanceName;
 
 // Deep copy
 - (QueryFilters *) clone;
